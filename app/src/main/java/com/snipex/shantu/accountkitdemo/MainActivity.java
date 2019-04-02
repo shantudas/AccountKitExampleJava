@@ -1,12 +1,15 @@
 package com.snipex.shantu.accountkitdemo;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
@@ -20,6 +23,8 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
+import com.facebook.accountkit.ui.SkinManager;
+import com.facebook.accountkit.ui.UIManager;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Button btnLogin;
     private static final Integer APP_REQUEST_CODE = 1001;
+    // constructor without a background image
+    AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder;
+    UIManager uiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
                 phoneLogIn();
             }
         });
+
+
+
     }
 
 
@@ -54,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
                         LoginType.PHONE,
                         AccountKitActivity.ResponseType.CODE); // or .ResponseType.TOKEN
         // ... perform additional configuration ...
+
+        uiManager = new SkinManager(SkinManager.Skin.CLASSIC, ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+        configurationBuilder.setUIManager(uiManager);
         intent.putExtra(
                 AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
                 configurationBuilder.build());
