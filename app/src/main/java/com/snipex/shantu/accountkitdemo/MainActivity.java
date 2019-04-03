@@ -1,12 +1,14 @@
 package com.snipex.shantu.accountkitdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -14,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.accountkit.AccessToken;
+import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
@@ -29,10 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Button btnLogin;
     private static final Integer APP_REQUEST_CODE = 1001;
-    // constructor without a background image
-    AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder;
-    UIManager uiManager;
-    int SKIN_BACKGROUND_IMAGE = R.drawable.bg_account_kit;
+    private int SKIN_BACKGROUND_IMAGE = R.drawable.bg_account_kit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         printKeyHash();
+
+        setBackGroundAnimation();
+
+
+        AccessToken accessToken = AccountKit.getCurrentAccessToken();
+        Log.d(TAG, "onCreate: accessToken"+accessToken);
+
+        if (accessToken != null) {
+            goToMyLoggedInActivity();
+        }
 
 
         btnLogin = findViewById(R.id.btnLogin);
@@ -54,21 +65,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setBackGroundAnimation() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+    }
+
 
     private void phoneLogIn() {
         final Intent intent = new Intent(MainActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(
                         LoginType.PHONE,
-                        AccountKitActivity.ResponseType.CODE); // or .ResponseType.TOKEN
+                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN and .ResponseType.CODE
         // ... perform additional configuration ...
 
         // to change the color of account kit skin
-        uiManager = new SkinManager(
+        UIManager uiManager = new SkinManager(
                 SkinManager.Skin.CLASSIC,
                 ContextCompat.getColor(MainActivity.this, R.color.colorAccent),
                 SKIN_BACKGROUND_IMAGE,
-                SkinManager.Tint.BLACK,
+                SkinManager.Tint.WHITE,
                 0.50D
 
         );
