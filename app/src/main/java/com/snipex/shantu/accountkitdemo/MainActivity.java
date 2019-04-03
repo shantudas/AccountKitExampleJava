@@ -1,17 +1,13 @@
 package com.snipex.shantu.accountkitdemo;
 
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     // constructor without a background image
     AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder;
     UIManager uiManager;
+    int SKIN_BACKGROUND_IMAGE = R.drawable.bg_account_kit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 phoneLogIn();
+
             }
         });
-
 
 
     }
@@ -66,11 +63,18 @@ public class MainActivity extends AppCompatActivity {
                         AccountKitActivity.ResponseType.CODE); // or .ResponseType.TOKEN
         // ... perform additional configuration ...
 
-        uiManager = new SkinManager(SkinManager.Skin.CLASSIC, ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+        // to change the color of account kit skin
+        uiManager = new SkinManager(
+                SkinManager.Skin.CLASSIC,
+                ContextCompat.getColor(MainActivity.this, R.color.colorAccent),
+                SKIN_BACKGROUND_IMAGE,
+                SkinManager.Tint.BLACK,
+                0.50D
+
+        );
         configurationBuilder.setUIManager(uiManager);
-        intent.putExtra(
-                AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
-                configurationBuilder.build());
+        configurationBuilder.setDefaultCountryCode("BD");
+        intent.putExtra(AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION, configurationBuilder.build());
         startActivityForResult(intent, APP_REQUEST_CODE);
     }
 
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToMyLoggedInActivity() {
         // send user to logged in activity
-        Intent intent=new Intent(MainActivity.this,HomeActivity.class);
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 
