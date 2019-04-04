@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private Button btnLogin;
     private static final Integer APP_REQUEST_CODE = 1001;
-    private int SKIN_BACKGROUND_IMAGE = R.drawable.android_gradient_list;
+    private int SKIN_BACKGROUND_IMAGE = R.drawable.gradient_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +57,36 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                phoneLogIn();
+                handlePhoneLogIn();
 
             }
         });
 
-
     }
 
+
+    /**
+     * set background animation
+     *
+     * @param @null
+     */
     private void setBackGroundAnimation() {
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.setExitFadeDuration(3000);
         animationDrawable.start();
     }
 
-
-    private void phoneLogIn() {
+    /**
+     * Handle phone login with account kit
+     * Setting up a configuration for account kit.
+     * Bangladesh(BD) set as default country
+     * and finally call activity result
+     *
+     * @param @null
+     */
+    private void handlePhoneLogIn() {
         final Intent intent = new Intent(LoginActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(LoginType.PHONE, AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN and .ResponseType.CODE
@@ -95,11 +107,14 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(intent, APP_REQUEST_CODE);
     }
 
+    /**
+     * calling onActivityResult from handlePhoneLogin
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
-    protected void onActivityResult(
-            final int requestCode,
-            final int resultCode,
-            final Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
             AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
