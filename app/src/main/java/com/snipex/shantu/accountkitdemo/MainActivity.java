@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        printKeyHash();
+        printKeyHash(); // print key hash
 
         setBackGroundAnimation();
 
 
         AccessToken accessToken = AccountKit.getCurrentAccessToken();
-        Log.d(TAG, "onCreate: accessToken"+accessToken);
+        Log.d(TAG, "onCreate: accessToken" + accessToken);
 
         if (accessToken != null) {
             goToMyLoggedInActivity();
@@ -77,9 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private void phoneLogIn() {
         final Intent intent = new Intent(MainActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
-                new AccountKitConfiguration.AccountKitConfigurationBuilder(
-                        LoginType.PHONE,
-                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN and .ResponseType.CODE
+                new AccountKitConfiguration.AccountKitConfigurationBuilder(LoginType.PHONE, AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN and .ResponseType.CODE
         // ... perform additional configuration ...
 
         // to change the color of account kit skin
@@ -116,11 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
                 } else {
-                    toastMessage = String.format(
-                            "Success:%s...",
-                            loginResult.getAuthorizationCode().substring(0, 10));
+                    toastMessage = String.format("Success:%s...", loginResult.getAuthorizationCode().substring(0, 10));
                 }
-
                 // If you have an authorization code, retrieve it from
                 // loginResult.getAuthorizationCode()
                 // and pass it to your server and exchange it for an access token.
@@ -130,27 +125,38 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Surface the result to your user in an appropriate way.
-            Toast.makeText(
-                    this,
-                    toastMessage,
-                    Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
         }
     }
 
+    /**
+     * This method is called when account kit gets any error
+     *
+     * @param error
+     */
     private void showErrorActivity(AccountKitError error) {
         Log.d(TAG, "showErrorActivity: " + error);
     }
 
+    /**
+     * This method is called when user verify his/her phone number
+     * sends user's to logged in activity
+     *
+     * @param @null
+     */
     private void goToMyLoggedInActivity() {
-        // send user to logged in activity
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 
 
+    /**
+     * get key hash for facebook account kit settings
+     * This key hash will be saved in account kit's android platform's debug key hash
+     *
+     * @param @null
+     */
     private void printKeyHash() {
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.snipex.shantu.accountkitdemo", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {

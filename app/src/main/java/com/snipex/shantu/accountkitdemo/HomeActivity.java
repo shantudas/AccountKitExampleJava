@@ -28,21 +28,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_home);
 
 
-        initialization();
+        initialization();   // all initialization
 
-        getLoggedPhoneNumber();
+        getLoggedPhoneNumber(); // get current logged in phone number
 
 
     }
 
     /**
      * get current logged in phone number
-     *
+     * <p>
      * Note:: make sure in your facebook account dashboard settings are like
-     *
+     * <p>
      * Turn off the option "App Require Secret"
      * Make sure the option "Enable Client Access Token Flow " has turned on, set to "YES"
-     *
+     * <p>
      * And, In your AccountKitConfiguration.AccountKitConfigurationBuilder
      * Use AccountKitActivity.ResponseType.TOKEN instead of AccountKitActivity.ResponseType.CODE
      */
@@ -66,12 +66,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * all initialization
+     *
+     * @param @null
+     */
     private void initialization() {
         tvUserPhone = findViewById(R.id.tvUserPhone);
         btnLogOut = findViewById(R.id.btnLogOut);
         btnLogOut.setOnClickListener(this);
     }
 
+    /**
+     * all on click goes here
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -81,6 +91,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * send users to the log in activity so that user can verify his/her number
+     * This method called when user pressed log out button
+     *
+     * @param @null
+     */
     private void goToLogInActivity() {
         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
         startActivity(intent);
