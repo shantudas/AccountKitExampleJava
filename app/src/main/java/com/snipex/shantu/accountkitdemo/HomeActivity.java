@@ -98,7 +98,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
      * @param @null
      */
     private void goToLogInActivity() {
-        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        AccountKit.logOut();
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
+
     }
 }

@@ -29,16 +29,16 @@ import com.facebook.accountkit.ui.UIManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private Button btnLogin;
     private static final Integer APP_REQUEST_CODE = 1001;
-    private int SKIN_BACKGROUND_IMAGE = R.drawable.bg_account_kit;
+    private int SKIN_BACKGROUND_IMAGE = R.drawable.android_gradient_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         printKeyHash(); // print key hash
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void phoneLogIn() {
-        final Intent intent = new Intent(MainActivity.this, AccountKitActivity.class);
+        final Intent intent = new Intent(LoginActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(LoginType.PHONE, AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN and .ResponseType.CODE
         // ... perform additional configuration ...
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
         // to change the color of account kit skin
         UIManager uiManager = new SkinManager(
                 SkinManager.Skin.CLASSIC,
-                ContextCompat.getColor(MainActivity.this, R.color.colorAccent),
+                ContextCompat.getColor(LoginActivity.this, android.R.color.holo_blue_dark),
                 SKIN_BACKGROUND_IMAGE,
-                SkinManager.Tint.WHITE,
+                SkinManager.Tint.BLACK,
                 0.50D
 
         );
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
      * @param @null
      */
     private void goToMyLoggedInActivity() {
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 
